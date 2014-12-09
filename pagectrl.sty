@@ -94,7 +94,7 @@
     % If we are under the minimum or over the maximum
     \int_compare_p:nNn { \thepage } < { \g_pagectrl_min_pages_int }
     ||
-    \int_compare_p:nNn { \g_pagectrl_max_pages_int } < { \thepage~ }
+    \int_compare_p:nNn { \g_pagectrl_max_pages_int } < { \thepage }
   } {
     % issue a warning
     \use:c { msg_ \tl_use:N \g_pagectrl_reporting_style_tl :nnxxx }
