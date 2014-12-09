@@ -48,10 +48,10 @@
 
 \keys_define:nn { pagectrl }
   {
-    minp .int_set:N = \g_pagectrl_min_pages_int,
-    minp .default:n = 0,
-    maxp .int_set:N = \g_pagectrl_max_pages_int,
-    maxp .default:n = 9999,
+    min .int_set:N = \g_pagectrl_min_pages_int,
+    min .default:n = 0,
+    max .int_set:N = \g_pagectrl_max_pages_int,
+    max .default:n = 9999,
     report-as .choices:nn =
                     { fatal, critical, error, warning, info }
                     {
