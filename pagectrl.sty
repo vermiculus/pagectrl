@@ -13,51 +13,52 @@
 %%% Key-Value Interface %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\tl_new:N \g_page_control_reporting_style_tl
+\tl_new:N  \g_pagectrl_reporting_style_tl
+\tl_set:Nn \g_pagectrl_reporting_style_tl { warning }
 
-\keys_define:nn { page-control-keys }
+\keys_define:nn { pagectrl }
   {
-    minp .int_set:N = \g_page_control_min_pages_int,
+    minp .int_set:N = \g_pagectrl_min_pages_int,
     minp .default:n = 0,
-    maxp .int_set:N = \g_page_control_max_pages_int,
+    maxp .int_set:N = \g_pagectrl_max_pages_int,
     maxp .default:n = 9999,
     report-as .choices:nn =
                     { fatal, critical, error, warning, info }
                     {
                       \typeout { ::: here }
-                      \tl_gset:NV \g_page_control_reporting_style_tl
+                      \tl_gset:NV \g_pagectrl_reporting_style_tl
                                   \l_keys_choice_tl
                     },
     default .code:n = {
-      \msg_info:nnnn { page-control }
+      \msg_info:nnnn { pagectrl }
                      { unknown-option }
                      { \l_keys_key_tl }
                      { #1 }
      },
   }
 
-\ProcessKeysOptions{ page-control-keys }
+\ProcessKeysOptions{ pagectrl }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Messages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\msg_new:nnnn { page-control } { invalid-length } {
+\msg_new:nnnn { pagectrl } { invalid-length } {
   This~document~doesn't~meet~the~given~page~limits.
 } {
-  This~paper~is~bounded~by~[#1,~#2].~This~document~has ~#3~pages.
+  This~paper~is~bounded~by~[#1,~#2].~This~document~has~#3~pages.
 }
 
-\msg_new:nnnn { page-control } { unknown-option } {
+\msg_new:nnnn { pagectrl } { unknown-option } {
   I~don't~know~the~option~`#1=#2`.
 } {
   Not~one~of~`minp',~`maxp',~or~`report-as'.
 }
 
-\msg_new:nnnn { page-control } { invalid-bounds } {
+\msg_new:nnnn { pagectrl } { invalid-bounds } {
   Invalid~page~bounds.
 } {
-  The~minimum~cannot~be~greater~than~the~maximum: [#1,~#2].
+  The~minimum~cannot~be~greater~than~the~maximum:~[#1,~#2].
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -67,13 +68,13 @@
 % Ensure that min <= max
 \cs_new:Nn \page_control_validate_bounds: {
   \int_compare:nNnT
-    { \g_page_control_min_pages_int }
+    { \g_pagectrl_min_pages_int }
     >
-    { \g_page_control_max_pages_int }
+    { \g_pagectrl_max_pages_int }
     {
-      \msg_error:nnnn { page-control } { invalid-bounds }
-        { \g_page_control_min_pages_int }
-        { \g_page_control_max_pages_int }
+      \msg_error:nnnn { pagectrl } { invalid-bounds }
+        { \g_pagectrl_min_pages_int }
+        { \g_pagectrl_max_pages_int }
     }
 }
 
@@ -84,15 +85,15 @@
   \bool_if:nT
   {
     % If we are under the minimum or over the maximum
-    \int_compare_p:nNn { \thepage } < { \g_page_control_min_pages_int }
+    \int_compare_p:nNn { \thepage } < { \g_pagectrl_min_pages_int }
     ||
-    \int_compare_p:nNn { \g_page_control_max_pages_int } < { \thepage }
+    \int_compare_p:nNn { \g_pagectrl_max_pages_int } < { \thepage~ }
   } {
     % issue a warning
-    \use:c { msg_ \tl_use:N \g_page_control_reporting_style_tl :nnxxx }
-    { page-control } { invalid-length }
-    { \int_use:N \g_page_control_min_pages_int }
-    { \int_use:N \g_page_control_max_pages_int }
+    \use:c { msg_ \tl_use:N \g_pagectrl_reporting_style_tl :nnxxx }
+    { pagectrl } { invalid-length }
+    { \int_use:N \g_pagectrl_min_pages_int }
+    { \int_use:N \g_pagectrl_max_pages_int }
     { \thepage }
   }
 }
