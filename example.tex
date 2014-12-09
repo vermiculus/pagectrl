@@ -1,6 +1,10 @@
 \documentclass{article}
 
-\usepackage{microtype} % quiet other warnings
+\usepackage{xparse}
+\ExplSyntaxOn
+\NewDocumentCommand \Pages { m O{test\newpage}}
+  { \prg_replicate:nn {#1} {#2} }
+\ExplSyntaxOff
 
 \usepackage[
 maxp=3,
@@ -10,7 +14,5 @@ report-as=error % fatal, error, critical, warning, info
 \usepackage{mwe}
 
 \begin{document}
-hello
-
-\lipsum[1-40]
+\Pages{105}
 \end{document}
