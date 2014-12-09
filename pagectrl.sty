@@ -65,7 +65,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Ensure that min <= max
-\cs_new:Nn \page_control_validate_bounds: {
+\cs_new:Nn \pagectrl_validate_bounds: {
   \int_compare:nNnT
     { \g_pagectrl_min_pages_int }
     >
@@ -98,4 +98,4 @@
 }
 
 \AtBeginDocument {
-  \page_control_validate_bounds: }
+  \pagectrl_validate_bounds: }
