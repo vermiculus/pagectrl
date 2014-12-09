@@ -57,6 +57,11 @@
                       \tl_gset:NV \g_pagectrl_reporting_style_tl
                                   \l_keys_choice_tl
                     },
+    report-as / unknown .code:n =
+      \msg_error:nnxxx { pagectrl } { unknown-choice }
+        { report-as }
+        { fatal,~critical,~error,~warning,~or~info }
+        { \exp_net:n {#1} },
     default .code:n = {
       \msg_info:nnnn { pagectrl }
                      { unknown-option }
