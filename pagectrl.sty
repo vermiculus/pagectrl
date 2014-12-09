@@ -13,9 +13,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \msg_new:nnnn { pagectrl } { invalid-length } {
-  This~document~doesn't~meet~the~given~page~limits.
+  This~document~doesn't~meet~the~given~page~limits:~[#1,~#2]~(#3).
 } {
-  This~paper~is~bounded~by~[#1,~#2].~This~document~has~#3~pages.
+  This~paper~must~have~a~minimum~of~#1~pages~and~a~maximum~of~#2~pages.~
+  It~currently~has~#3~pages,~which~is~outside~of~this~range.
 }
 
 \msg_new:nnnn { pagectrl } { unknown-option } {
@@ -27,10 +28,9 @@
 \msg_new:nnnn { pagectrl } { unknown-choice } {
   I~don't~know~the~option~`#1=#3`.
 } {
-  \clist_new:Nn \l_tmpa_clist {#1}
-  Not~one~of~
-  \clist_use:Nnnn \l_tmpa_clist { ~or~ } { ,~ } { ,~or~ }
+  Not~one~of~#2.
 }
+% @todo Shove #2 into a clist and join with {~or~}{,~}{,~or~}
 
 \msg_new:nnnn { pagectrl } { invalid-bounds } {
   Invalid~page~bounds.
