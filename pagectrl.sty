@@ -1,0 +1,101 @@
+\RequirePackage{expl3}
+\ProvidesExplClass
+{pagectrl}
+{2014/03/01}
+{1.0}
+{Managing page limits}
+
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+
+\RequirePackage{l3keys2e}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Key-Value Interface %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tl_new:N \g_page_control_reporting_style_tl
+
+\keys_define:nn { page-control-keys }
+  {
+    minp .int_set:N = \g_page_control_min_pages_int,
+    minp .default:n = 0,
+    maxp .int_set:N = \g_page_control_max_pages_int,
+    maxp .default:n = 9999,
+    report-as .choices:nn =
+                    { fatal, critical, error, warning, info }
+                    {
+                      \typeout { ::: here }
+                      \tl_gset:NV \g_page_control_reporting_style_tl
+                                  \l_keys_choice_tl
+                    },
+    default .code:n = {
+      \msg_info:nnnn { page-control }
+                     { unknown-option }
+                     { \l_keys_key_tl }
+                     { #1 }
+     },
+  }
+
+\ProcessKeysOptions{ page-control-keys }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Messages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\msg_new:nnnn { page-control } { invalid-length } {
+  This~document~doesn't~meet~the~given~page~limits.
+} {
+  This~paper~is~bounded~by~[#1,~#2].~This~document~has ~#3~pages.
+}
+
+\msg_new:nnnn { page-control } { unknown-option } {
+  I~don't~know~the~option~`#1=#2`.
+} {
+  Not~one~of~`minp',~`maxp',~or~`report-as'.
+}
+
+\msg_new:nnnn { page-control } { invalid-bounds } {
+  Invalid~page~bounds.
+} {
+  The~minimum~cannot~be~greater~than~the~maximum: [#1,~#2].
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Private Functions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Ensure that min <= max
+\cs_new:Nn \page_control_validate_bounds: {
+  \int_compare:nNnT
+    { \g_page_control_min_pages_int }
+    >
+    { \g_page_control_max_pages_int }
+    {
+      \msg_error:nnnn { page-control } { invalid-bounds }
+        { \g_page_control_min_pages_int }
+        { \g_page_control_max_pages_int }
+    }
+}
+
+% @todo have macros \StartPageCount and \StopPageCount to limit scope.
+
+% Check page bounds for min/max
+\AtEndDocument{
+  \bool_if:nT
+  {
+    % If we are under the minimum or over the maximum
+    \int_compare_p:nNn { \thepage } < { \g_page_control_min_pages_int }
+    ||
+    \int_compare_p:nNn { \g_page_control_max_pages_int } < { \thepage }
+  } {
+    % issue a warning
+    \use:c { msg_ \tl_use:N \g_page_control_reporting_style_tl :nnxxx }
+    { page-control } { invalid-length }
+    { \int_use:N \g_page_control_min_pages_int }
+    { \int_use:N \g_page_control_max_pages_int }
+    { \thepage }
+  }
+}
+
+\AtBeginDocument {
+  \page_control_validate_bounds: }
