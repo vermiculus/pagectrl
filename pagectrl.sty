@@ -25,9 +25,9 @@
 }
 
 \msg_new:nnnn { pagectrl } { unknown-choice } {
-  I~don't~know~the~option~'#1=#3'.
+  I~don't~know~the~option~'#1=#2'.
 } {
-  Not~one~of~#2.
+  Not~one~of~#3.
 }
 % @todo Shove #2 into a clist and join with {~or~}{,~}{,~or~}
 
@@ -82,8 +82,8 @@
     report-as / unknown .code:n =
       \msg_error:nnxxx { pagectrl } { unknown-choice }
         { report-as }
-        { fatal,~critical,~error,~warning,~or~info }
-        { \exp_not:n {#1} },
+        { \exp_not:n {#1} }
+        { fatal,~critical,~error,~warning,~or~info },
     default .code:n = {
       \msg_info:nnxx { pagectrl }
                      { unknown-option }
