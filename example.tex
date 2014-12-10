@@ -6,14 +6,18 @@
   { \prg_replicate:nn {#1} {#2} }
 \ExplSyntaxOff
 
-\usepackage[
-min=50,
-max=105,
-report-as=warning % fatal, error, critical, warning, info
-]{pagectrl}
+\usepackage[range=4-5,report-as=error]{pagectrl}
+% `report-as' can be any of {fatal, error, critical, warning, info}
 
 \usepackage{mwe}
 
 \begin{document}
-\Pages{105}
+% too few
+%\Pages{2}           
+
+% too many
+%\Pages{8}           
+
+% just right
+\Pages{4}            
 \end{document}

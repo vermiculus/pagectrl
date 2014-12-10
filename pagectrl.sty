@@ -21,7 +21,7 @@
 \msg_new:nnnn { pagectrl } { unknown-option } {
   I~don't~know~the~option~'#1=#2'.
 } {
-  Not~one~of~'min',~'max',~or~'report-as'.
+  Not~one~of~'min',~'max',~'range',~or~'report-as'.
 }
 
 \msg_new:nnnn { pagectrl } { unknown-choice } {
@@ -35,6 +35,8 @@
   Invalid~page~bounds.
 } {
   The~minimum~cannot~be~greater~than~the~maximum:~[#1,~#2].
+  If~you~gave~a~'range'~argument,~
+    ensure~that~it~is~of~the~form~'range=min-max'.
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -48,6 +50,22 @@
 
 \keys_define:nn { pagectrl }
   {
+    range  .code:n = {
+      \seq_set_split:Nnn \l_tmpa_seq {-} {#1}
+      \seq_pop_left:NN \l_tmpa_seq \l_tmpa_tl
+      \seq_pop_left:NN \l_tmpa_seq \l_tmpb_tl
+      \int_compare:nNnTF { \seq_count:N \l_tmpa_seq } = { 0 }
+        {
+          \int_gset:Nn \g_pagectrl_min_pages_int { \tl_use:N \l_tmpa_tl }
+          \int_gset:Nn \g_pagectrl_max_pages_int { \tl_use:N \l_tmpb_tl }
+          \pagectrl_validate_bounds:
+        }
+        {
+          \msg_error:nnxx { pagectrl } { invalid-bounds }
+            { \tl_use:N \l_tmpa_tl }
+            { \tl_use:N \l_tmpb_tl }
+        }
+    },
     min .int_set:N = \g_pagectrl_min_pages_int,
     min .default:n = 0,
     max .int_set:N = \g_pagectrl_max_pages_int,
