@@ -93,9 +93,6 @@
      },
   }
 
-\ProcessKeysOptions{ pagectrl }
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Private Functions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -132,6 +129,7 @@
 
 % @todo have macros \StartPageCount and \StopPageCount to limit scope.
 
+\ProcessKeysOptions{ pagectrl }
 % Check page bounds for min/max
 \AtEndDocument{
   \pagectrl_finalize: }
