@@ -47,8 +47,6 @@
 %%% Key-Value Interface %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\RequirePackage{l3keys2e}
-
 \tl_new:N  \g_pagectrl_reporting_style_tl
 \tl_set:Nn \g_pagectrl_reporting_style_tl { warning }
 
@@ -128,6 +126,7 @@
 
 % @todo have macros \StartPageCount and \StopPageCount to limit scope.
 
+\RequirePackage{l3keys2e}
 \ProcessKeysOptions{ pagectrl }
 \pagectrl_validate_bounds:
 
