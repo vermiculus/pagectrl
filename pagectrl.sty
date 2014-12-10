@@ -62,7 +62,6 @@
         {
           \int_gset:Nn \g_pagectrl_min_pages_int { \tl_use:N \l_tmpa_tl }
           \int_gset:Nn \g_pagectrl_max_pages_int { \tl_use:N \l_tmpb_tl }
-          \pagectrl_validate_bounds:
         }
         {
           \msg_error:nnxx { pagectrl } { invalid-range }
@@ -130,9 +129,8 @@
 % @todo have macros \StartPageCount and \StopPageCount to limit scope.
 
 \ProcessKeysOptions{ pagectrl }
+\pagectrl_validate_bounds:
+
 % Check page bounds for min/max
 \AtEndDocument{
   \pagectrl_finalize: }
-
-\AtBeginDocument {
-  \pagectrl_validate_bounds: }
