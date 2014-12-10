@@ -19,7 +19,7 @@ warning if it is not at least 15 pages or over 20 pages long.
 If you would like to control how `pagectrl' reports a page length
 issue, simply pass it in as another package option:
 
-    \usepackage[range=15-20,report-as=error]{pagectrl}
+    \usepackage[range=15-20, report-as=error]{pagectrl}
 
 Instead of a warning, `pagectrl' will issue an error to let you know
 something is wrong.  `report-as=warning' is the default.
