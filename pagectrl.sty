@@ -124,36 +124,52 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Ensure that min <= max.  If not, error out.
-\cs_new_protected:Npn \pagectrl_validate_bounds: {
-  \int_compare:nNnT
-    { \g_pagectrl_min_pages_int }
-    >
-    { \g_pagectrl_max_pages_int }
-    {
-      \msg_error:nnxx { pagectrl } { invalid-bounds }
-        { \int_use:N \g_pagectrl_min_pages_int }
-        { \int_use:N \g_pagectrl_max_pages_int }
-    }
-}
-
-% Test if the document is within the page limits using \thepage.
-\cs_new:Npn \pagectrl_finalize: {
-  \bool_if:nT
+\cs_new_protected:Npn \pagectrl_validate_bounds:
   {
-    % If we are under the minimum or over the maximum, ...
-    \int_compare_p:nNn { \thepage } < { \g_pagectrl_min_pages_int }
-    ||
-    \int_compare_p:nNn { \g_pagectrl_max_pages_int } < { \thepage }
-  } {
-    % ... report results using reporting_style from key 'report-as'
-    % <<reporting style implementation>>
+    \int_compare:nNnT
+      { \g_pagectrl_min_pages_int } > { \g_pagectrl_max_pages_int }
+      {
+        \msg_error:nnxx { pagectrl } { invalid-bounds }
+          { \int_use:N \g_pagectrl_min_pages_int }
+          { \int_use:N \g_pagectrl_max_pages_int }
+      }
+  }
+
+% Report a page-limit error <<reporting style implementation>>
+\cs_new_protected:Npn \__pagectrl_report_error:
+  {
     \use:c { msg_ \tl_use:N \g_pagectrl_reporting_style_tl :nnxxx }
       { pagectrl } { invalid-length }
       { \int_use:N \g_pagectrl_min_pages_int }
       { \int_use:N \g_pagectrl_max_pages_int }
       { \thepage }
   }
-}
+
+% Report a page-limit error <<reporting style implementation>>
+\cs_new_protected:Npn \__pagectrl_report_error_if:n #1
+  {
+    \bool_if:nT {#1}
+      { \__pagectrl_report_error: }
+  }
+
+\cs_new_protected:Npn \pagectrl_error_if_under:
+  {
+    \__pagectrl_report_error_if:n
+      { \int_compare_p:nNn { \thepage } < { \g_pagectrl_min_pages_int } }
+  }
+
+\cs_new_protected:Npn \pagectrl_error_if_over:
+  {
+    \__pagectrl_report_error_if:n
+      { \int_compare_p:nNn { \thepage } > { \g_pagectrl_min_pages_int } }
+  }
+
+% Test if the document is within the page limits.
+\cs_new_protected:Npn \pagectrl_finalize:
+  {
+    \pagectrl_error_if_under:
+    \pagectrl_error_if_over:
+  }
 
 % @todo have macros \StartPageCount and \StopPageCount to limit scope.
 
@@ -162,5 +178,4 @@
 \pagectrl_validate_bounds:
 
 % Check page bounds for min/max
-\AtEndDocument{
-  \pagectrl_finalize: }
+\AtEndDocument{ \pagectrl_finalize: }
