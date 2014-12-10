@@ -1,5 +1,4 @@
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
-\RequirePackage{smcm-common}
 \ProvidesExplClass
 {test-case}
 {2014/12/10}
