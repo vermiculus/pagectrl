@@ -34,10 +34,13 @@
 \msg_new:nnnn { pagectrl } { invalid-bounds } {
   Invalid~page~bounds.
 } {
-  Note~that~the~minimum~cannot~be~greater~than~the~maximum:~
-    [#1,~#2].~
-  If~you~gave~a~'range'~argument,~
-    ensure~that~it~is~of~the~form~'range=min-max'.
+  Note~that~the~minimum~cannot~be~greater~than~the~maximum:~[#1,~#2].
+}
+
+\msg_new:nnnn { pagectrl } { invalid-range } {
+  Invalid~page~range.
+} {
+  Ensure~that~your~'range'~is~of~the~form~'range=min-max'.
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -62,7 +65,7 @@
           \pagectrl_validate_bounds:
         }
         {
-          \msg_error:nnxx { pagectrl } { invalid-bounds }
+          \msg_error:nnxx { pagectrl } { invalid-range }
             { \tl_use:N \l_tmpa_tl }
             { \tl_use:N \l_tmpb_tl }
         }
