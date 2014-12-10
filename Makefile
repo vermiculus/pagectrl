@@ -2,7 +2,7 @@ LATEX ?= latex -interaction nonstopmode
 ERROR_CASES   := $(wildcard tests/error-*.tex)
 SUCCESS_CASES := $(wildcard tests/success-*.tex)
 
-all :: $(ERROR_CASES) $(SUCCESS_CASES)
+test :: $(ERROR_CASES) $(SUCCESS_CASES)
 
 $(ERROR_CASES) ::
 	$(info "it is $(LATEX)")
