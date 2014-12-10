@@ -91,10 +91,7 @@
     }
 }
 
-% @todo have macros \StartPageCount and \StopPageCount to limit scope.
-
-% Check page bounds for min/max
-\AtEndDocument{
+\cs_new:Npn \pagectrl_finalize: {
   \bool_if:nT
   {
     % If we are under the minimum or over the maximum
@@ -110,6 +107,12 @@
     { \thepage }
   }
 }
+
+% @todo have macros \StartPageCount and \StopPageCount to limit scope.
+
+% Check page bounds for min/max
+\AtEndDocument{
+  \pagectrl_finalize: }
 
 \AtBeginDocument {
   \pagectrl_validate_bounds: }
