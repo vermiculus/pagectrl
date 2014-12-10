@@ -99,7 +99,7 @@
 %
 %
     report-as .choices:nn =
-                    { fatal, critical, error, warning, info }
+                    { error, warning, info }
                     {
                       \tl_gset:NV \g_pagectrl_reporting_style_tl
                                   \l_keys_choice_tl
@@ -108,7 +108,7 @@
       \msg_error:nnxxx { pagectrl } { unknown-choice }
         { report-as }
         { \exp_not:n {#1} }
-        { fatal,~critical,~error,~warning,~or~info },
+        { error,~warning,~or~info },
 %
 %
     default .code:n = {

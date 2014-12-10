@@ -33,8 +33,6 @@ of `l3msg' within `expl3'.  It can be any of them:
 - info     :: issue a statement in the log file
 - warning  :: issue a statement in the log file and terminal output
 - error    :: issue a normal error
-- critical :: issue a critical error
-- fatal    :: issue a fatal error
 
                                --------
 
