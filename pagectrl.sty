@@ -19,7 +19,7 @@
 }
 
 \msg_new:nnnn { pagectrl } { unknown-option } {
-  I~don't~know~the~option~'#1=#2'.
+  I~don't~know~the~option~'#1=#2', so I'm going to ignore it.
 } {
   Not~one~of~'min',~'max',~'range',~or~'report-as'.
 }
@@ -34,7 +34,8 @@
 \msg_new:nnnn { pagectrl } { invalid-bounds } {
   Invalid~page~bounds.
 } {
-  The~minimum~cannot~be~greater~than~the~maximum:~[#1,~#2].
+  Note~that~the~minimum~cannot~be~greater~than~the~maximum:~
+    [#1,~#2].~
   If~you~gave~a~'range'~argument,~
     ensure~that~it~is~of~the~form~'range=min-max'.
 }
@@ -80,12 +81,12 @@
       \msg_error:nnxxx { pagectrl } { unknown-choice }
         { report-as }
         { fatal,~critical,~error,~warning,~or~info }
-        { \exp_net:n {#1} },
+        { \exp_not:n {#1} },
     default .code:n = {
-      \msg_info:nnnn { pagectrl }
+      \msg_info:nnxx { pagectrl }
                      { unknown-option }
                      { \l_keys_key_tl }
-                     { #1 }
+                     { \exp_not:n {#1} }
      },
   }
 
@@ -103,9 +104,9 @@
     >
     { \g_pagectrl_max_pages_int }
     {
-      \msg_error:nnnn { pagectrl } { invalid-bounds }
-        { \g_pagectrl_min_pages_int }
-        { \g_pagectrl_max_pages_int }
+      \msg_error:nnxx { pagectrl } { invalid-bounds }
+        { \int_use:N \g_pagectrl_min_pages_int }
+        { \int_use:N \g_pagectrl_max_pages_int }
     }
 }
 
