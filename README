@@ -1,0 +1,46 @@
+pagectrl -- a LaTeX package for page requirements
+
+Homepage:    https://github.com/vermiculus/pagectrl
+Bug Tracker: https://github.com/vermiculus/pagectrl/issues
+
+                               --------
+
+This package makes it simple to manage page requirements on your
+document (minimums and maximums).  Install the package through the
+usual means and issue
+
+    \usepackage[range=15-20]{pagectrl}
+
+for the most basic usage.  This will set up your document to issue a
+warning if it is not at least 15 pages or over 20 pages long.
+
+                               --------
+
+If you would like to control how `pagectrl' reports a page length
+issue, simply pass it in as another package option:
+
+    \usepackage[range=15-20,report-as=error]{pagectrl}
+
+Instead of a warning, `pagectrl' will issue an error to let you know
+something is wrong.  `report-as=warning' is the default.
+
+                               --------
+
+The value of the `report-as' key maps cleanly onto the message classes
+of `l3msg' within `expl3'.  It can be any of them:
+
+- info     :: issue a statement in the log file
+- warning  :: issue a statement in the log file and terminal output
+- error    :: issue a normal error
+- critical :: issue a critical error
+- fatal    :: issue a fatal error
+
+                               --------
+
+Any and all bugs should be reported via the issue tracker on GitHub
+(linked above).  If you do not have and do not wish to make a (free)
+GitHub account, phrase the report in the form of a question and ask on
+
+    http://tex.stackexchange.com
+
+Someone will probably send it my way or be able to report it as a bug.
