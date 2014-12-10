@@ -11,6 +11,9 @@
 %%% Messages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% #1: page minimum
+% #2: page maximum
+% #3: actual page length
 \msg_new:nnnn { pagectrl } { invalid-length } {
   This~document~doesn't~meet~the~given~page~limits:~[#1,~#2]~(#3).
 } {
@@ -18,19 +21,26 @@
   It~currently~has~#3~pages,~which~is~outside~of~this~range.
 }
 
+% #1: option given
+% #2: value attempted
 \msg_new:nnnn { pagectrl } { unknown-option } {
   I~don't~know~the~option~'#1=#2', so I'm going to ignore it.
 } {
   Not~one~of~'min',~'max',~'range',~or~'report-as'.
 }
 
+% @todo Shove #2 into a clist and join with {~or~}{,~}{,~or~}
+% #1: option given
+% #2: value attempted
+% #3: appropriate values
 \msg_new:nnnn { pagectrl } { unknown-choice } {
   I~don't~know~the~option~'#1=#2'.
 } {
   Not~one~of~#3.
 }
-% @todo Shove #2 into a clist and join with {~or~}{,~}{,~or~}
 
+% #1: page minimum
+% #2: page maximum
 \msg_new:nnnn { pagectrl } { invalid-bounds } {
   Invalid~page~bounds.
 } {
@@ -47,11 +57,19 @@
 %%% Key-Value Interface %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% The function by which to report any page limit errors (assuming
+% correct syntax).  To work correctly, this must be an implemented
+% message class.  See `l3msg' documentation and the implementation:
+% <<reporting style implementation>>
 \tl_new:N  \g_pagectrl_reporting_style_tl
 \tl_set:Nn \g_pagectrl_reporting_style_tl { warning }
+
+% The minimum and maximum number of pages allowed.  See
+% \pagectrl_validate_bounds: for final usage.
 \int_new:N \g_pagectrl_min_pages_int
 \int_new:N \g_pagectrl_max_pages_int
 
+% Setup package interface
 \keys_define:nn { pagectrl }
   {
     range  .code:n = {
@@ -69,10 +87,15 @@
             { \tl_use:N \l_tmpb_tl }
         }
     },
+%
+%
     min .int_set:N = \g_pagectrl_min_pages_int,
     min .default:n = 0,
+%
     max .int_set:N = \g_pagectrl_max_pages_int,
     max .default:n = 9999,
+%
+%
     report-as .choices:nn =
                     { fatal, critical, error, warning, info }
                     {
@@ -84,6 +107,8 @@
         { report-as }
         { \exp_not:n {#1} }
         { fatal,~critical,~error,~warning,~or~info },
+%
+%
     default .code:n = {
       \msg_info:nnxx { pagectrl }
                      { unknown-option }
@@ -96,7 +121,7 @@
 %%% Private Functions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Ensure that min <= max
+% Ensure that min <= max.  If not, error out.
 \cs_new_protected:Npn \pagectrl_validate_bounds: {
   \int_compare:nNnT
     { \g_pagectrl_min_pages_int }
@@ -109,15 +134,17 @@
     }
 }
 
+% Test if the document is within the page limits using \thepage.
 \cs_new:Npn \pagectrl_finalize: {
   \bool_if:nT
   {
-    % If we are under the minimum or over the maximum
+    % If we are under the minimum or over the maximum, ...
     \int_compare_p:nNn { \thepage } < { \g_pagectrl_min_pages_int }
     ||
     \int_compare_p:nNn { \g_pagectrl_max_pages_int } < { \thepage }
   } {
-    % issue a warning
+    % ... report results using reporting_style from key 'report-as'
+    % <<reporting style implementation>>
     \use:c { msg_ \tl_use:N \g_pagectrl_reporting_style_tl :nnxxx }
       { pagectrl } { invalid-length }
       { \int_use:N \g_pagectrl_min_pages_int }
