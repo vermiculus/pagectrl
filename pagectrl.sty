@@ -161,7 +161,7 @@
 \cs_new_protected:Npn \pagectrl_error_if_over:
   {
     \__pagectrl_report_error_if:n
-      { \int_compare_p:nNn { \thepage } > { \g_pagectrl_min_pages_int } }
+      { \int_compare_p:nNn { \thepage } > { \g_pagectrl_max_pages_int } }
   }
 
 % Test if the document is within the page limits.
